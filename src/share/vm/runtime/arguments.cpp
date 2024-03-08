@@ -756,13 +756,14 @@ bool Arguments::parse_argument(const char* arg, Flag::Flags origin) {
     }
   }
 
+  //今天
   if (sscanf(arg, "%" XSTR(BUFLEN) NAME_RANGE ":%c", name, &punct) == 2 && punct == '=') {
     const char* value = strchr(arg, '=') + 1;
     // -XX:Foo:=xxx will reset the string flag to the given value.
     if (value[0] == '\0') {
       value = NULL;
     }
-    return set_string_flag(name, value, orxigin);
+    return set_string_flag(name, value, origin);
   }
 
 #define SIGNED_FP_NUMBER_RANGE "[-0123456789.]"
