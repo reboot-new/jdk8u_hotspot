@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "__availability": "cpp",
+        "charconv": "cpp",
+        "string": "cpp"
+    }
+}
