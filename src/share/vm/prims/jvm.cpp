@@ -934,7 +934,6 @@ JVM_ENTRY(jintArray, JVM_GetResourceLookupCache(JNIEnv *env, jobject loader, con
 #endif
 JVM_END
 
-
 // Returns a class loaded by the bootstrap class loader; or null
 // if not found.  ClassNotFoundException is not thrown.
 //

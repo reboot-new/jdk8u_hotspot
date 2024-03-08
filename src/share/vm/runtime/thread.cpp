@@ -3347,6 +3347,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
 
   // Parse arguments
   // Note: this internally calls os::init_container_support()
+  // 其中包括吧 -Djava.class.path转换到 SystemProperty 里面
   jint parse_result = Arguments::parse(args);
   if (parse_result != JNI_OK) return parse_result;
 
@@ -3405,6 +3406,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   vm_init_globals();
 
   // Attach the main thread to this os thread
+  // 创建java线程？？？
   JavaThread* main_thread = new JavaThread();
   main_thread->set_thread_state(_thread_in_vm);
   // must do this before set_active_handles and initialize_thread_local_storage
@@ -3415,6 +3417,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   main_thread->record_stack_base_and_size();
   main_thread->initialize_thread_local_storage();
 
+  // 设置线程的主干函数？？
   main_thread->set_active_handles(JNIHandleBlock::allocate_block());
 
   if (!main_thread->set_as_starting_thread()) {
@@ -3430,7 +3433,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   main_thread->create_stack_guard_pages();
 
   // Initialize Java-Level synchronization subsystem
-  ObjectMonitor::Initialize() ;
+  ObjectMonitor::Initialize();
 
   // Initialize global modules
   jint status = init_globals();
@@ -3494,6 +3497,7 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   JvmtiExport::enter_start_phase();
 
   // Notify JVMTI agents that VM has started (JNI is up) - nop if no agents.
+  // 设置 java程序中的 system 属性进行了重新设置
   JvmtiExport::post_vm_start();
 
   {

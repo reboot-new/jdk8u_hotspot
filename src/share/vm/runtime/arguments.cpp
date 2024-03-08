@@ -762,7 +762,7 @@ bool Arguments::parse_argument(const char* arg, Flag::Flags origin) {
     if (value[0] == '\0') {
       value = NULL;
     }
-    return set_string_flag(name, value, origin);
+    return set_string_flag(name, value, orxigin);
   }
 
 #define SIGNED_FP_NUMBER_RANGE "[-0123456789.]"
@@ -1048,6 +1048,7 @@ bool Arguments::add_property(const char* prop) {
     PropertyList_unique_add(&_system_properties, key, value, true);
     return true;
   }
+  // classPath 设置
   // Create new property and add at the end of the list
   PropertyList_unique_add(&_system_properties, key, value);
   return true;
@@ -2740,6 +2741,7 @@ jint Arguments::parse_vm_init_args(const JavaVMInitArgs* args) {
   }
 
   // Parse JavaVMInitArgs structure passed in
+  // 设置java.class.path 的配置
   result = parse_each_vm_init_arg(args, &scp, &scp_assembly_required, Flag::COMMAND_LINE);
   if (result != JNI_OK) {
     return result;
@@ -3136,6 +3138,7 @@ jint Arguments::parse_each_vm_init_arg(const JavaVMInitArgs* args,
         }
       }
 
+      // 设置java.class.path 的配置
       if (!add_property(tail)) {
         return JNI_ENOMEM;
       }
@@ -3948,6 +3951,8 @@ jint Arguments::parse(const JavaVMInitArgs* args) {
 #endif
   }
 
+
+
   if (IgnoreUnrecognizedVMOptions) {
     // uncast const to modify the flag args->ignoreUnrecognized
     *(jboolean*)(&args->ignoreUnrecognized) = true;
@@ -3982,6 +3987,7 @@ jint Arguments::parse(const JavaVMInitArgs* args) {
   }
 
   // Parse JavaVMInitArgs structure passed in, as well as JAVA_TOOL_OPTIONS and _JAVA_OPTIONS
+  // 解析jvm出初始化参数，其中包括 -Djava.class.path转换到SystemProperty列表里面，对
   jint result = parse_vm_init_args(args);
   if (result != JNI_OK) {
     return result;
